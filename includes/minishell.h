@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
+/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:57:39 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/06/19 13:56:53 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/07/08 16:54:55 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,5 @@ void	run_signal(int sig);
 void	init_cmd(t_cmd *c);
 void	init_data(t_data *d);
 
-//exit
-int		is_exit(char *str);
-
-//parsing
-void	get_input(t_data *data);
-
-//utils_pars
-int		get_nb_strs(char **strs);
-char	**ft_cpy_env(char **strs);
-
-//Builtins
-void	ft_pwd(t_data data);
-void	ft_cmd(t_data data);
 
 #endif
