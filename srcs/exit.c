@@ -1,43 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_function.c                                    :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 10:20:10 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/06/19 14:14:22 by falberti         ###   ########.fr       */
+/*   Created: 2024/06/17 13:14:41 by falberti          #+#    #+#             */
+/*   Updated: 2024/06/17 13:28:07 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
-void	safe_malloc(size_t bytes)
+int	is_exit(char *str)
 {
-	void	*ptr;
-
-	ptr = malloc(bytes);
-	if (!ptr)
-	{
-		printf("Malloc failed\n");
-		exit(1);
-	}
-}
-
-void	error_exit(const char *msg)
-{
-	printf("%s\n", msg);
-	return ;
-}
-
-void	safe_pid(pid_t pid)
-{
-	if (pid < 0)
-		error_exit("Fork failed");
-}
-
-void	safe_pipe(int *pipefd)
-{
-	if (pipe(pipefd) == -1)
-		error_exit("Pipe failed");
+	if (ft_strncmp(str, "exit", 4) == 0)
+		exit(0);
+	return (0);
 }

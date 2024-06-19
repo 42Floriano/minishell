@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:26:02 by falberti          #+#    #+#             */
-/*   Updated: 2024/06/13 16:08:43 by falberti         ###   ########.fr       */
+/*   Updated: 2024/06/19 10:53:56 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ static void	ctrl_c(int sig)
 	(void)sig;
 }
 
+static void heredoc(int sig)
+{
+    (void)sig;
+	write(1, "\n", 1);
+	exit(130);
+}
+
 void	run_signal(int sig)
 {
 	if (sig == 1)
@@ -46,10 +53,10 @@ void	run_signal(int sig)
 		printf("exit\n");
 		exit(0);
 	}
-	//TODO
 	if (sig == 4)
 	{
-
+		signal(SIGINT, heredoc);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	return ;
 }

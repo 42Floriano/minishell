@@ -1,43 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_function.c                                    :+:      :+:    :+:   */
+/*   utils_pars.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 10:20:10 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/06/19 14:14:22 by falberti         ###   ########.fr       */
+/*   Created: 2024/06/19 10:22:58 by falberti          #+#    #+#             */
+/*   Updated: 2024/06/19 11:05:34 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
-void	safe_malloc(size_t bytes)
+int	get_nb_strs(char **strs)
 {
-	void	*ptr;
+	int	nb;
 
-	ptr = malloc(bytes);
-	if (!ptr)
+	nb = 0;
+	while (strs[nb])
+		nb++;
+	return (nb);
+}
+
+char	**ft_cpy_env(char **strs)
+{
+	int		i;
+	char	**env;
+
+	if (strs == NULL)
+		return (NULL);
+	env = malloc(sizeof(char *) * (get_nb_strs(strs) + 1));
+	if (env == NULL)
+		return (NULL);
+	i = 0;
+	while (strs[i])
 	{
-		printf("Malloc failed\n");
-		exit(1);
+		env[i] = ft_strdup(strs[i]);
+		i++;
 	}
-}
-
-void	error_exit(const char *msg)
-{
-	printf("%s\n", msg);
-	return ;
-}
-
-void	safe_pid(pid_t pid)
-{
-	if (pid < 0)
-		error_exit("Fork failed");
-}
-
-void	safe_pipe(int *pipefd)
-{
-	if (pipe(pipefd) == -1)
-		error_exit("Pipe failed");
+	env[i] = NULL;
+	return (env);
 }
