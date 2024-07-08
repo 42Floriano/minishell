@@ -6,15 +6,15 @@
 #    By: falberti <falberti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 12:52:36 by falberti          #+#    #+#              #
-#    Updated: 2024/07/08 16:54:24 by falberti         ###   ########.fr        #
+#    Updated: 2024/07/08 16:55:56 by falberti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ## Sources
-SOURCES_DIR		=	srcs
-lIBRARIES_DIR	=	includes
+SOURCES_DIR = srcs
+LIBRARIES_DIR = includes
 
-HEADER = $(lIBRARIES_DIR)/minishell
+HEADER = $(LIBRARIES_DIR)/minishell
 
 FILES = $(SOURCES_DIR)/minishell\
 				$(SOURCES_DIR)/signals\
@@ -32,7 +32,8 @@ OFILES = $(addsuffix .o, $(FILES))
 ####################################################################
 ## Varguments
 CC = gcc
-CFLAGS = -Werror -Wextra -Wall -I $(HEADER)  -g
+CFLAGS = -Werror -Wextra -Wall -I $(HEADER) -I/opt/homebrew/opt/readline/include -g
+LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline -lhistory
 NAME = mshell
 
 #####################################################################
@@ -40,7 +41,6 @@ NAME = mshell
 
 LIBFTXL = includes/libft_xl/libftxl.a
 
-##all: FLAGS = $(CFLAGS)
 all: $(NAME)
 
 $(LIBFTXL):
@@ -48,18 +48,18 @@ $(LIBFTXL):
 
 ## -fsanitize=address
 $(NAME): $(OFILES) $(LIBFTXL)
-		$(CC) $(OFILES) $(LIBFTXL) -lreadline -o $(NAME)
+	$(CC) $(OFILES) $(LIBFTXL) $(LDFLAGS) -o $(NAME)
 
-### For each .o file  it needs the .c file | $< is automatic var that takes the param and $@ the target
-$(FILES).o: $(FILES).c
-		$(CC) $(CFLAGS) -c $< -o $@
+### For each .o file it needs the .c file | $< is automatic var that takes the param and $@ the target
+$(SOURCES_DIR)/%.o: $(SOURCES_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-		$(MAKE) -C includes/libft_xl clean
-		rm -f $(OFILES)
+	$(MAKE) -C includes/libft_xl clean
+	rm -f $(OFILES)
 
 fclean: clean
-		$(MAKE) -C includes/libft_xl fclean
-		rm -f $(NAME)
+	$(MAKE) -C includes/libft_xl fclean
+	rm -f $(NAME)
 
 re: fclean clean all
