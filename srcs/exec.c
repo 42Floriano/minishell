@@ -3,26 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:04:08 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/07/08 16:57:11 by falberti         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:00:16 by aavduli          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
-char	*find_path(char *cmd, char **envp)
+char	**found_split(char **envp)
 {
-	char	**path;
-	char	*path;
+	char	**paths;
 	int		i;
-	char	*part_path;
 
 	i = 0;
 	while (ft_strnstr(envp[i], "PATH=", 5) == NULL)
 		i++;
+	if (envp[i] == NULL)
+		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
+	return (paths);
+}
+
+char	*find_path(char *cmd, char **envp)
+{
+	char	**paths;
+	char	*path;
+	int		i;
+	char	*part_path;
+
+	paths = found_split(envp);
 	i = 0;
 	while (paths[i])
 	{
@@ -30,43 +41,43 @@ char	*find_path(char *cmd, char **envp)
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
 		if (access(path, F_OK) == 0)
-			return (path);
+			break ;
 		free(path);
+		path = NULL;
 		i++;
 	}
 	i = -1;
 	while (paths[++i])
 		free(paths[i]);
 	free(paths);
-	return (NULL);
+	return (path);
 }
 
-void	execute(char *argv, char **envp)
+void	ft_execute(t_data *data)
 {
-	char	**cmd;
 	int		i;
+	int		status;
+	int		pid;
 	char	*path;
 
 	i = -1;
-	cmd = ft_split(argv, ' ');
-	path = find_path(cmd[0], envp);
+	path = find_path(data->str[0], data->env);
 	if (!path)
 	{
-		printf("Command not found: %s\n", cmd[0]);
-		i = -1;
-		while (cmd[++i])
-			free(cmd[i]);
-		free(cmd);
-		return ;
+		while (data->str[i++])
+			free(data->str[i]);
+		free(data->str);
+		printf("prob with cmd");
 	}
-	if (execve(path, cmd, envp) == -1)
+	pid = fork();
+	if (pid == -1)
+		printf("prob with fork");
+	else if (pid == 0)
 	{
-		printf("Error: %s\n", strerror(errno));
-		i = -1;
-		while (cmd[++i])
-			free(cmd[i]);
-		free(cmd);
-		free(path);
-		return ;
+		if (execve(path, data->str, data->env) == -1)
+			printf("prob with execve");
 	}
+	else
+		waitpid(pid, &status, 0);
+	free(path);
 }

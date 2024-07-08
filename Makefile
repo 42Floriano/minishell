@@ -6,7 +6,7 @@
 #    By: falberti <falberti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 12:52:36 by falberti          #+#    #+#              #
-#    Updated: 2024/07/08 16:55:56 by falberti         ###   ########.fr        #
+#    Updated: 2024/07/08 15:27:45 by falberti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,17 @@ LIBRARIES_DIR = includes
 HEADER = $(LIBRARIES_DIR)/minishell
 
 FILES = $(SOURCES_DIR)/minishell\
-				$(SOURCES_DIR)/signals\
-				$(SOURCES_DIR)/init_structs\
-				$(SOURCES_DIR)/exit\
-				$(SOURCES_DIR)/parsing\
-				$(SOURCES_DIR)/utils_pars\
-				$(SOURCES_DIR)/builtins\
+        $(SOURCES_DIR)/signals\
+        $(SOURCES_DIR)/init_structs\
+        $(SOURCES_DIR)/exit\
+        $(SOURCES_DIR)/parsing\
+        $(SOURCES_DIR)/utils_pars\
+				$(SOURCES_DIR)/exec\
+        $(SOURCES_DIR)/commands\
+				$(SOURCES_DIR)/freerers\
+				$(SOURCES_DIR)/mini_split\
 
-## This is a bit tricky for me but it ask to check the end of the string in FILES than add .c if there is nothing
-## Also possible to just liste the .c and .o files
+## Ajout de .c et .o aux fichiers dans FILES
 CFILES = $(addsuffix .c, $(FILES))
 OFILES = $(addsuffix .o, $(FILES))
 
@@ -62,4 +64,4 @@ fclean: clean
 	$(MAKE) -C includes/libft_xl fclean
 	rm -f $(NAME)
 
-re: fclean clean all
+re: fclean all
