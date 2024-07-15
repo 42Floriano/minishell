@@ -6,11 +6,33 @@
 /*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:04:08 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/06/20 15:00:16 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/07/15 14:52:35 by aavduli          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ft_mshell(t_data *data, char **cmd)
+{
+	int		status;
+	int		pid;
+
+	if (access(cmd[0], F_OK) == -1)
+	{
+		printf("minishell: commande not found : %s\n", cmd[0]);
+		free_tab(cmd);
+		return ;
+	}
+	pid = fork();
+	safe_pid(pid);
+	if (pid == 0)
+	{
+		if (execve(cmd[0], cmd, data->env) == -1)
+			perror("execve\n");
+	}
+	else
+		waitpid(pid, &status, 0);
+}
 
 char	**found_split(char **envp)
 {
@@ -34,6 +56,8 @@ char	*find_path(char *cmd, char **envp)
 	char	*part_path;
 
 	paths = found_split(envp);
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -53,31 +77,29 @@ char	*find_path(char *cmd, char **envp)
 	return (path);
 }
 
-void	ft_execute(t_data *data)
+void	ft_execute(char **cmd, t_data *data)
 {
-	int		i;
 	int		status;
 	int		pid;
 	char	*path;
 
-	i = -1;
-	path = find_path(data->str[0], data->env);
+	path = find_path(cmd[0], data->env);
 	if (!path)
 	{
-		while (data->str[i++])
-			free(data->str[i]);
-		free(data->str);
-		printf("prob with cmd");
+		printf("minishell: commande not found : %s\n", cmd[0]);
+		free_tab(cmd);
+		return ;
 	}
 	pid = fork();
-	if (pid == -1)
-		printf("prob with fork");
-	else if (pid == 0)
+	safe_pid(pid);
+	if (pid == 0)
 	{
-		if (execve(path, data->str, data->env) == -1)
-			printf("prob with execve");
+		if (execve(path, cmd, data->env) == -1)
+		{
+			perror("minishell");
+			return ;
+		}
 	}
 	else
 		waitpid(pid, &status, 0);
-	free(path);
 }

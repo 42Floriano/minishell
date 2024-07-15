@@ -6,7 +6,7 @@
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:49:41 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/10 17:14:31 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:41:08 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	split_create_cmd_list(t_data *data, char *input)
 	head = NULL;
 	tail = NULL;
 	token = mini_split(input);
+	data->str = mini_split(input);
 	while (token[i] != NULL)
 	{
 		tail = create_and_link_nodes(tail, token[i]);
@@ -92,8 +93,6 @@ static	int	init_parsing(char *str, t_data *data)
 	is_exit(str, data);
 	split_create_cmd_list(data, str);
 	check_update_type(data);
-	if (*str != 0)
-		printf("%s\n", str);
 	return (0);
 }
 
@@ -113,6 +112,7 @@ void	get_input(t_data *data)
 		if (*line)
 			add_history(line);
 		init_parsing(line, data);
+		ft_read_cmd(data);
 		free(line);
 		if (data->cmd != NULL)
 		{
