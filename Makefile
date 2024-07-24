@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: falberti <falberti@student.42.fr>          +#+  +:+       +#+         #
+#    By: albertini <albertini@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 12:52:36 by falberti          #+#    #+#              #
-#    Updated: 2024/07/16 15:37:06 by falberti         ###   ########.fr        #
+#    Updated: 2024/07/23 12:10:45 by albertini        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,9 +30,13 @@ FILES = $(SOURCES_DIR)/minishell\
 		$(SOURCES_DIR)/pars_check\
 		$(SOURCES_DIR)/lst_utils\
 		$(SOURCES_DIR)/safe_function\
+		$(SOURCES_DIR)/redir\
+		$(SOURCES_DIR)/execution\
 		$(SOURCES_DIR)/heredoc\
 		$(SOURCES_DIR)/heredoc_utils\
 		$(SOURCES_DIR)/pars_nodes_cre\
+		$(SOURCES_DIR)/var_utils\
+		$(SOURCES_DIR)/variables\
 
 ## Ajout de .c et .o aux fichiers dans FILES
 CFILES = $(addsuffix .c, $(FILES))
@@ -41,8 +45,8 @@ OFILES = $(addsuffix .o, $(FILES))
 ####################################################################
 ## Varguments
 CC = gcc
-CFLAGS = -Werror -Wextra -Wall -I $(HEADER) -I/opt/homebrew/opt/readline/include -g
-LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline -lhistory
+CFLAGS = -Werror -Wextra -Wall -I $(HEADER) -I/usr/local/opt/readline/include -g
+LDFLAGS = -L/usr/local/opt/readline/lib -lreadline -lhistory
 NAME = mshell
 
 #####################################################################

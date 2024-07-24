@@ -6,38 +6,11 @@
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:22:58 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/16 16:55:01 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:24:22 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static void	check_var_str(t_data *data, t_cmd *cmd)
-{
-	int		i;
-	char	*cpy;
-	size_t	var_len;
-
-	if (cmd->str[0] == '$')
-		cpy = cmd->str + 1;
-	else
-		cpy = cmd->str;
-	var_len = ft_strlen(cpy);
-	i = 0;
-	while (data->env[i])
-	{
-		if (ft_strncmp(data->env[i], cpy, var_len) == 0
-			&& data->env[i][var_len] == '=')
-		{
-			free(cmd->str);
-			cmd->str = ft_strdup(data->env[i] + var_len + 1);
-			return ;
-		}
-		i++;
-	}
-	free(cmd->str);
-	cmd->str = NULL;
-}
 
 int	get_nb_strs(char **strs)
 {
@@ -76,12 +49,24 @@ void	check_update_type(t_data *data)
 	current = data->cmd;
 	while (current != NULL)
 	{
-		current->type = determine_type(current->str);
-		if (current->type == 7)
+		if (current->prev && (current->prev->type == 4))
 		{
-			check_var_str(data, current);
+			data->infile = ft_strdup(current->str);
+			current->type = 11;
 		}
+		else if (current->prev && (current->prev->type == 5))
+		{
+			data->outfile = ft_strdup(current->str);
+			current->type = 11;
+		}
+		else
+			current->type = determine_type(current->str);
+		if (current->type == 8)
+			current->str = ft_itoa(data->exit_status);
+		if (current->type == 7 || current->type == 2)
+			current->str = replace_env_variables(current->str, data);
+		if (current->type == 7 || current->type == 2 || current->type == 8)
+			current->type = 2;
 		current = current->next;
 	}
-	return ;
 }

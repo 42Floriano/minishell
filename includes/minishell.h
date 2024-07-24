@@ -6,7 +6,7 @@
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:57:39 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/07/17 17:50:18 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:47:47 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,26 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft_xl/libft.h"
+# include <stdbool.h>
+# include <stdbool.h>
+
+// # define PL fprintf(stderr, "file: %s line: %d pid: %i\n", __FILE__, __LINE__, getpid())
+// # define PI(x) fprintf(stderr, "PI: %d\n", (x));
+// # define PS(x) fprintf(stderr, "PS: %s\n", (x));
 
 /*
- 1 = CMD
- 2 = CMD_S_QUOTE
- 3 = CMD_D_QUOTE
- 4 = CMD_PIPE
- 5 = CMD_IN_RED
- 6 = CMD_OUT_RED
- 7 = CMD_APP_OUT_RED
- 8 = CMD_ENV_VAR
- 9 = CMD_LAST_EXIT
- 10 = CMD_HEREDOC
- 11 = CMD_ERROR
+ 0 = CMD
+ 1 = CMD_S_QUOTE
+ 2 = CMD_D_QUOTE
+ 3 = CMD_PIPE
+ 4 = CMD_IN_RED
+ 5 = CMD_OUT_RED
+ 6 = CMD_APP_OUT_RED
+ 7 = CMD_ENV_VAR
+ 8 = CMD_LAST_EXIT
+ 9 = CMD_HEREDOC
+ 10 = CMD_ERROR
+ 11 = CMD_FILE
 */
 
 enum e_cmdtype {
@@ -52,7 +59,8 @@ enum e_cmdtype {
 	CMD_ENV_VAR,
 	CMD_LAST_EXIT,
 	CMD_HEREDOC,
-	CMD_ERROR
+	CMD_ERROR,
+	CMD_FILE
 };
 
 typedef struct s_cmd	t_cmd;
@@ -73,6 +81,12 @@ typedef struct s_data
 	int		exit_status;
 	char	**env;
 	char	**original;
+	char	*infile;
+	char	*outfile;
+	int		stdin;
+	int		stdout;
+	int		pipe;
+	int		out;
 }	t_data;
 
 //init_structs
@@ -82,7 +96,7 @@ void	init_data(t_data *d);
 //signal
 void	run_signal(int sig);
 
-//parsing
+// parsing
 void	get_input(t_data *data);
 
 //pars_utils
@@ -102,10 +116,20 @@ void	split_create_cmd_list(t_data *data, char *input);
 //void	print_split(char **split);
 
 //heredoc
-void	execute_command_with_heredoc(char *command, char *delimiter);
+void	execute_command_with_heredoc(char *com, char *del, int var, t_data *d);
 
 //heredoc_utils
 char	*ft_strtok(char *str, const char *delim);
+
+//Variables
+char	*replace_env_variables(char *input, t_data *data);
+
+//Var_utils
+char	*get_env(char *name, t_data *data);
+char	*get_env_value(char *var, t_data *data);
+char	*extract_variable_name(char *start);
+char	*ft_strndup(const char *s, size_t n);
+int		get_full_size(char *str, t_data *data);
 
 //Builtins
 void	ft_env(t_data *data);
@@ -118,12 +142,14 @@ void	ft_unset(char **cmd, t_data *data);
 void	ft_mshell(t_data *data, char **cmd);
 
 //Exec
-void	ft_read_cmd(t_data *data);
+char	**creat_tab(t_data *data, char **cmd);
 void	ft_execute(char **cmd, t_data *data);
 
 //safe_functions
+void	ft_reset_std(t_data *data);
 void	*safe_malloc(size_t bytes);
-void	*safe_pid(pid_t pid);
+pid_t	safe_pid(pid_t pid);
+void	safe_pipe(int pipefd[2]);
 
 //freerers
 void	free_list(char **list);
@@ -132,7 +158,15 @@ void	free_all(t_data *data);
 void	free_tab(char **tab);
 
 //lst_utils
+//t_cmd	*create_new_node(char *str);
+void	ft_read_lst(t_data *data);
 int		lst_cmd_size(t_data *data);
+
+//redirection
+void	execute_pipeline(t_data *data, char **cmd);
+void	execute_redir(t_data *data, char **cmd);
+void	check_redir(t_data *data, char **cmd);
+void	ft_reset_std(t_data *data);
 
 //exit
 int		is_exit(char *str, t_data *data);

@@ -6,28 +6,11 @@
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:49:41 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/17 17:51:40 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:31:24 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// static void	print_cmd_list(t_cmd *cmd)
-// {
-// 	t_cmd	*current;
-
-// 	current = cmd;
-// 	while (current != NULL)
-// 	{
-// 		if (current->str != NULL)
-// 		{
-// 			printf("%s\n", current->str);
-// 			printf("%d\n", current->type);
-// 		}
-// 		current = current->next;
-// 	}
-// }
-//print_cmd_list(data->cmd);
 
 static	int	init_parsing(char *str, t_data *data)
 {
@@ -40,29 +23,34 @@ static	int	init_parsing(char *str, t_data *data)
 	}
 	split_create_cmd_list(data, str);
 	check_update_type(data);
-	ft_read_cmd(data);
 	return (0);
 }
 
-static void	handle_line(t_data *data, char *line)
+static void	heredoc_var(t_data *data, char *line, int var)
 {
 	char	*delimiter;
 	char	*command;
 
+	command = ft_strtok(line, " ");
+	ft_strtok(NULL, " ");
+	delimiter = ft_strtok(NULL, " ");
+	if (command != NULL && delimiter != NULL)
+		execute_command_with_heredoc(command, delimiter, var, data);
+}
+
+static void	handle_line(t_data *data, char *line)
+{
 	if (line[0] == '\0')
 		return ;
 	is_exit(line, data);
-	if (ft_strnstr(line, "<<", ft_strlen(line)) != 0)
-	{
-		command = ft_strtok(line, " ");
-		ft_strtok(NULL, " ");
-		delimiter = ft_strtok(NULL, " ");
-		if (command != NULL && delimiter != NULL)
-			execute_command_with_heredoc(command, delimiter);
-	}
+	if (ft_strnstr(line, "<<-", ft_strlen(line)) != 0)
+		heredoc_var(data, line, 0);
+	else if (ft_strnstr(line, "<<", ft_strlen(line)) != 0)
+		heredoc_var(data, line, 1);
 	else
 	{
 		init_parsing(line, data);
+		ft_read_lst(data);
 	}
 	if (data->cmd != NULL)
 	{
