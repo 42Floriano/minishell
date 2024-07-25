@@ -3,14 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertini <albertini@student.42.fr>        +#+  +:+       +#+         #
+#    By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 12:52:36 by falberti          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2024/07/23 12:10:45 by albertini        ###   ########.fr        #
-=======
-#    Updated: 2024/07/18 18:27:01 by albertini        ###   ########.fr        #
->>>>>>> origin/main
+#    Updated: 2024/07/25 14:31:34 by aavduli          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +37,7 @@ FILES = $(SOURCES_DIR)/minishell\
 		$(SOURCES_DIR)/pars_nodes_cre\
 		$(SOURCES_DIR)/var_utils\
 		$(SOURCES_DIR)/variables\
+		$(SOURCES_DIR)/export\
 
 ## Ajout de .c et .o aux fichiers dans FILES
 CFILES = $(addsuffix .c, $(FILES))

@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
+/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:20 by aavduli           #+#    #+#             */
-/*   Updated: 2024/07/24 15:11:51 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/07/25 17:22:49 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static char	*ft_shelldup(const char *s1)
+{
+	char	*strr;
+	int		size;
+	int		i;
+	int		j;
+
+	size = ft_strlen(s1);
+	strr = malloc((size + 1) * sizeof(char));
+	if (!strr)
+		return (strr);
+	i = 0;
+	j = 0;
+	while (s1[i])
+	{
+		if (s1[i] != 34 && s1[i] != 39)
+		{
+			strr[j] = s1[i];
+			j++;
+		}
+		i++;
+	}
+	strr[j] = '\0';
+	return (strr);
+}
 
 void	ft_launch(t_data *data, char **cmd)
 {
@@ -29,8 +55,10 @@ void	ft_launch(t_data *data, char **cmd)
 void	ft_read_lst(t_data *data)
 {
 	char	**cmd;
+	t_cmd	*head;
 
 	cmd = NULL;
+	head = data->cmd;
 	while (data->cmd)
 	{
 		if (data->cmd->type >= 0 && data->cmd->type <= 2)
@@ -48,7 +76,10 @@ void	ft_read_lst(t_data *data)
 		else if (cmd)
 			ft_launch(data, cmd);
 		if (data->cmd == NULL)
+		{
+			data->cmd = head;
 			return ;
+		}
 	}
 }
 
@@ -60,11 +91,13 @@ char	**creat_tab(t_data *data, char **cmd)
 
 	current = data->cmd;
 	size = lst_cmd_size(data);
+	if (cmd != NULL)
+		free_list(cmd);
 	cmd = safe_malloc(sizeof(char *) * (size + 1));
 	i = 0;
 	while (current && (current->type >= 0 && current->type <= 2))
 	{
-		cmd[i] = ft_strdup(current->str);
+		cmd[i] = ft_shelldup(current->str);
 		current = current->next;
 		i++;
 	}

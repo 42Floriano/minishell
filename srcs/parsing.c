@@ -6,11 +6,24 @@
 /*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:49:41 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/24 15:31:24 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:16:26 by falberti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+// void print_cmd_list(t_cmd *head)
+// {
+//     t_cmd *current;
+
+//     current = head;
+//     while (current != NULL)
+//     {
+//         printf("Command: %s\n", current->str);
+//         current = current->next;
+//     }
+// }
+//print_cmd_list(data->cmd);
 
 static	int	init_parsing(char *str, t_data *data)
 {
