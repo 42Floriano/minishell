@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:57:39 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/07/25 17:22:32 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:07:37 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@
 # include "libft_xl/libft.h"
 # include <stdbool.h>
 # include <stdbool.h>
-
-# define PL fprintf(stderr, "file: %s line: %d pid: %i\n", __FILE__, __LINE__, getpid())
-# define PI(x) fprintf(stderr, "PI: %d\n", (x));
-# define PS(x) fprintf(stderr, "PS: %s\n", (x));
 
 /*
  0 = CMD
@@ -115,20 +111,21 @@ void	split_create_cmd_list(t_data *data, char *input);
 //void	print_split(char **split);
 
 //heredoc
-void	execute_command_with_heredoc(char *com, char *del, int var, t_data *d);
+void	execute_command_with_heredoc(char **com, char *del, int var, t_data *d);
 
 //heredoc_utils
 char	*ft_strtok(char *str, const char *delim);
 
 //Variables
 char	*replace_env_variables(char *input, t_data *data);
+int		get_full_size(char *str, t_data *data);
 
 //Var_utils
 char	*get_env(char *name, t_data *data);
 char	*get_env_value(char *var, t_data *data);
 char	*extract_variable_name(char *start);
 char	*ft_strndup(const char *s, size_t n);
-int		get_full_size(char *str, t_data *data);
+void	count_exit(int *nb, char **str, t_data *data);
 
 //Builtins
 void	ft_env(t_data *data);

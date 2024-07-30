@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:49:41 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/25 17:16:26 by falberti         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:07:52 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,30 @@ static	int	init_parsing(char *str, t_data *data)
 static void	heredoc_var(t_data *data, char *line, int var)
 {
 	char	*delimiter;
-	char	*command;
+	char	**copy;
+	int		i;
+	int		save;
 
-	command = ft_strtok(line, " ");
-	ft_strtok(NULL, " ");
-	delimiter = ft_strtok(NULL, " ");
-	if (command != NULL && delimiter != NULL)
-		execute_command_with_heredoc(command, delimiter, var, data);
+	copy = mini_split(line);
+	i = 0;
+	while ((ft_strnstr(copy[i], "<<-", ft_strlen(copy[i])) == 0
+			&& ft_strnstr(copy[i], "<<", ft_strlen(copy[i])) == 0))
+		i++;
+	save = i;
+	delimiter = ft_strdup(copy[i + 1]);
+	while (copy[i])
+		free(copy[i++]);
+	copy[save] = NULL;
+	if (copy != NULL && delimiter != NULL)
+		execute_command_with_heredoc(copy, delimiter, var, data);
+	free_list(copy);
+	free(delimiter);
 }
 
 static void	handle_line(t_data *data, char *line)
 {
+	t_cmd	*current;
+
 	if (line[0] == '\0')
 		return ;
 	is_exit(line, data);
@@ -63,7 +76,9 @@ static void	handle_line(t_data *data, char *line)
 	else
 	{
 		init_parsing(line, data);
+		current = data->cmd;
 		ft_read_lst(data);
+		data->cmd = current;
 	}
 	if (data->cmd != NULL)
 	{
