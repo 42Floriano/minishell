@@ -6,7 +6,7 @@
 /*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 14:49:15 by aavduli           #+#    #+#             */
-/*   Updated: 2024/07/30 15:48:03 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/08/05 17:46:24 by aavduli          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	count_pipe(t_data *data)
 			count++;
 		current = current->next;
 	}
+	if (count > 0)
+		data->cmd->pipe = true;
 	return (count);
 }
 
@@ -58,19 +60,19 @@ int	lst_cmd_size(t_data *data)
 	return (size);
 }
 
-t_cmd	*create_new_node(char *str)
-{
-	t_cmd	*nn;
+// t_cmd	*create_new_node(char *str)
+// {
+// 	t_cmd	*nn;
 
-	nn = (t_cmd *)malloc(sizeof(t_cmd));
-	if (nn == NULL)
-	{
-		perror("Failed to allocate memory");
-		exit(EXIT_FAILURE);
-	}
-	nn->str = ft_strdup(str);
-	nn->type = -1;
-	nn->next = NULL;
-	nn->prev = NULL;
-	return (nn);
-}
+// 	nn = (t_cmd *)malloc(sizeof(t_cmd));
+// 	if (nn == NULL)
+// 	{
+// 		perror("Failed to allocate memory");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	nn->str = ft_strdup(str);
+// 	nn->type = -1;
+// 	nn->next = NULL;
+// 	nn->prev = NULL;
+// 	return (nn);
+// }

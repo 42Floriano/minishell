@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/19 10:22:58 by falberti          #+#    #+#             */
-/*   Updated: 2024/07/30 13:39:34 by falberti         ###   ########.fr       */
+/*   Created: 2024/07/24 17:46:15 by aavduli           #+#    #+#             */
+/*   Updated: 2024/08/05 18:49:48 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	check_update_type(t_data *data)
 			data->infile = ft_strdup(current->str);
 			current->type = 11;
 		}
-		else if (current->prev && (current->prev->type == 5))
+		else if (current->prev && (current->prev->type == 5
+				|| current->prev->type == 6))
 		{
 			data->outfile = ft_strdup(current->str);
 			current->type = 11;

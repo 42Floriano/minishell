@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/23 15:57:39 by avdylavduli       #+#    #+#             */
-/*   Updated: 2024/08/05 15:40:44 by falberti         ###   ########.fr       */
+/*   Created: 2024/07/24 17:46:15 by aavduli           #+#    #+#             */
+/*   Updated: 2024/08/05 19:56:59 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@
  11 = CMD_FILE
 */
 
-enum e_cmdtype {
+enum e_cmdtype
+{
 	CMD_NONE,
 	CMD_S_QUOTE,
 	CMD_D_QUOTE,
@@ -65,6 +66,7 @@ struct s_cmd
 {
 	char			*str;
 	int				type;
+	bool			pipe;
 	t_cmd			*next;
 	t_cmd			*prev;
 };
@@ -165,11 +167,15 @@ int		count_pipe(t_data *data);
 int		count_cmd(t_cmd *current);
 
 //redirection
-void	execute_pipeline(t_data *data, char ***cmd);
-void	execute_redir(t_data *data);
+void	check_redir(t_data *data, char ***cmd);
 void	ft_reset_std(t_data *data);
 void	ft_stdin(t_data *data);
 void	ft_stdout(t_data *data);
+int		ft_stdin_inpipe(t_data *data);
+int		ft_stdout_inpipe(t_data *data);
+
+void	execute_pipe(t_data *data, char **cmd, int in, int out);
+void	execute_pipeline(t_data *data, char ***cmd_tab);
 
 //exit
 int		is_exit(char *str, t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:01:05 by aavduli           #+#    #+#             */
-/*   Updated: 2024/07/30 16:31:02 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/08/05 19:21:12 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,48 @@ void	ft_stdin(t_data *data)
 
 void	ft_stdout(t_data *data)
 {
-	int	fd;
+	int		fd;
+	t_cmd	*tmp;
 
-	if (data->cmd->type == 5)
+	tmp = data->cmd;
+	fd = STDIN_FILENO;
+	while (tmp->type != 5 && tmp->type != 6 && tmp->next)
+		tmp = tmp->next;
+	if (tmp->type == 5)
 		fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else
+	if (tmp->type == 6)
 		fd = open(data->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
-		printf("minishell: %s: %s\n", data->cmd->next->str, strerror(errno));
+		printf("minishell: %s: %s\n", tmp->next->str, strerror(errno));
 		return ;
 	}
 	if (dup2(fd, 1) == -1)
 	{
-		printf("minishell: %s: %s\n", data->cmd->next->str, strerror(errno));
+		printf("minishell: %s: %s\n", tmp->next->str, strerror(errno));
 		return ;
 	}
 	close(fd);
 }
 
-void	execute_redir(t_data *data)
+void	check_redir(t_data *data, char ***cmd_tab)
 {
-	if (data->cmd->type == 4)
+	int		i;
+
+	i = 0;
+	while (cmd_tab[i + 1])
+		i++;
+	if (data->infile)
+	{
 		ft_stdin(data);
-	if (data->cmd->type == 5 || data->cmd->type == 6)
+		free(data->infile);
+		data->infile = NULL;
+	}
+	if (data->outfile)
+	{
 		ft_stdout(data);
+		free(data->outfile);
+		data->outfile = NULL;
+	}
+	ft_launch(data, cmd_tab[i]);
 }
