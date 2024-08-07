@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:20 by aavduli           #+#    #+#             */
-/*   Updated: 2024/08/05 19:20:17 by albertini        ###   ########.fr       */
+/*   Updated: 2024/08/07 12:58:39 by aavduli          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,17 @@ void	ft_read_lst(t_data *data)
 	if (data->pipe > 0 && data->cmd->pipe == true)
 	{
 		execute_pipeline(data, cmd_tab);
+		free(data->infile);
+		free(data->outfile);
+		data->infile = NULL;
+		data->outfile = NULL;
+		ft_reset_std(data);
 	}
 	else if ((data->infile || data->outfile))
 	{
 		check_redir(data, cmd_tab);
 	}
-	else if (cmd_tab[1] == NULL && !data->outfile)
+	else if (cmd_tab[1] == NULL && (!data->outfile || !data->infile))
 	{
 		ft_launch(data, cmd_tab[0]);
 	}

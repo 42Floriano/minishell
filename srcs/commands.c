@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: falberti <falberti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 16:25:05 by aavduli           #+#    #+#             */
-/*   Updated: 2024/08/05 14:32:32 by falberti         ###   ########.fr       */
+/*   Updated: 2024/08/07 13:46:49 by aavduli          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ft_mshell(t_data *data, char **cmd)
+{
+	int		status;
+	int		pid;
+
+	if (access(cmd[0], F_OK) == -1)
+	{
+		printf("minishell: commande not found : %s\n", cmd[0]);
+		free_list(cmd);
+		free_list(cmd);
+		return ;
+	}
+	pid = fork();
+	safe_pid(pid);
+	if (pid == 0)
+	{
+		if (execve(cmd[0], cmd, data->env) == -1)
+			perror("execve\n");
+		data->exit_status = 126;
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			data->exit_status = WEXITSTATUS(status);
+	}
+}
 
 static void	ft_print_echo(char **cmd, int i, int j)
 {
@@ -63,15 +91,15 @@ void	ft_pwd(char **cmd, t_data *d)
 
 void	ft_cmd(char **cmd, t_data *data)
 {
-	if (ft_strncmp(cmd[0], "echo", 4) == 0)
+	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		ft_echo(cmd, data);
-	else if (ft_strncmp(cmd[0], "cd", 6) == 0)
+	else if (ft_strncmp(cmd[0], "cd", 7) == 0)
 		ft_cd(cmd, data);
-	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
+	else if (ft_strncmp(cmd[0], "pwd", 5) == 0)
 		ft_pwd(cmd, data);
-	else if (ft_strncmp(cmd[0], "export", 7) == 0)
+	else if (ft_strncmp(cmd[0], "export", 8) == 0)
 		ft_export(cmd, data);
-	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
+	else if (ft_strncmp(cmd[0], "unset", 7) == 0)
 	{
 		if (cmd[1] == NULL)
 		{
@@ -83,7 +111,7 @@ void	ft_cmd(char **cmd, t_data *data)
 	}
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		ft_env(data);
-	else if (ft_strncmp(cmd[0], "./mshell", 9) == 0)
+	else if (ft_strncmp(cmd[0], "./minishell", 13) == 0)
 		ft_mshell(data, cmd);
 	else
 		ft_execute(cmd, data);
