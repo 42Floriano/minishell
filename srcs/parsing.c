@@ -3,29 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aavduli <aavduli@student.42.fr>            +#+  +:+       +#+        */
+/*   By: albertini <albertini@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 17:46:15 by aavduli           #+#    #+#             */
-/*   Updated: 2024/08/06 21:49:30 by aavduli          ###   ########.fr       */
+/*   Updated: 2024/08/09 16:07:11 by albertini        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 extern int	g_exist_status;
-
-// void print_cmd_list(t_cmd *head)
-// {
-//     t_cmd *current;
-
-//     current = head;
-//     while (current != NULL)
-//     {
-//         printf("Command: %s\n", current->str);
-//         current = current->next;
-//     }
-// }
-//print_cmd_list(data->cmd);
 
 static	int	init_parsing(char *str, t_data *data)
 {
@@ -34,6 +21,7 @@ static	int	init_parsing(char *str, t_data *data)
 		printf("Please enter a valid input!\n"
 			"\\;&<>() are unvalid in this shell\n"
 			"And quotes must be closed\n");
+		data->exit_status = 5;
 		return (0);
 	}
 	split_create_cmd_list(data, str);
