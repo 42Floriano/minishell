@@ -1,55 +1,115 @@
-Afficher un prompt :
+# 🐚 Minishell - 42 Project
 
-ls: write error: Bad file descriptor
+Minishell is a minimalistic UNIX shell inspired by **Bash**. It is a **42 school project** designed to deepen understanding of process management, pipes, file descriptors, and signal handling in C.
 
-Afficher un prompt pour attendre une nouvelle commande.
-Exemple attendu : Affichage d'un prompt (minishell$) à chaque nouvelle ligne de commande.
-Recherche et lancement d'exécutables :
+---
 
-Recherche du bon exécutable en utilisant la variable PATH ou des chemins relatifs/absolus.
-Exemple attendu : Exécution correcte des commandes comme ls, echo, etc.
-Builtins à implémenter :
+## 📌 What is a Shell?
+A **shell** is a command-line interpreter that allows users to interact with the operating system by executing commands. It manages processes, file operations, and system calls, providing a user-friendly interface for executing programs and scripts.
 
-echo avec option -n :
-Exemple attendu : echo -n "Hello" affiche Hello sans retour à la ligne.
-cd avec un chemin relatif ou absolu :
-Exemple attendu : cd /home/user change le répertoire courant.
-pwd sans options :
-Exemple attendu : pwd affiche le répertoire courant.
-export sans options :
-Exemple attendu : export VAR=value ajoute ou modifie une variable d'environnement.
-unset sans options :
-Exemple attendu : unset VAR supprime une variable d'environnement.
-env sans options et sans arguments :
-Exemple attendu : env affiche toutes les variables d'environnement.
-exit sans options :
-Exemple attendu : exit termine le shell.
-Séparation des commandes par ; :
+## 📌 Project Overview
+Minishell is a recreation of a simplified version of the **Bash** shell. The goal of this project was to implement core shell functionalities, including command execution, environment variable handling, input/output redirections, and process management while respecting the constraints of a UNIX-based shell.
 
-Exemple attendu : ls ; pwd exécute ls puis pwd.
-Gestion des quotes simples (') et doubles (") :
+- **Language**: C
+- **Compilation**: `gcc -Wall -Wextra -Werror`
+- **Libraries Used**: `readline`
+- **Status**: Mandatory part completed (Bonus not implemented)
 
-Les quotes doivent fonctionner comme dans bash, sauf pour les commandes multi-lignes.
-Exemple attendu : echo "Hello World" affiche Hello World.
-Redirections :
+---
 
-<, >, >> doivent fonctionner comme dans bash, sauf pour l'agrégation de descripteurs de fichiers.
-Exemple attendu : echo "Hello" > file.txt écrit Hello dans file.txt.
-Pipes (|) :
+## 📁 Repository Structure
 
-Doivent fonctionner comme dans bash pour connecter la sortie d'une commande à l'entrée d'une autre.
-Exemple attendu : ls | grep file affiche les fichiers contenant file.
-Variables d'environnement :
+```
+├── includes/          # Header files
+├── srcs/              # Source code files
+├── Makefile           # Compilation rules
+├── README.md          # Project documentation
+└── en.subject.pdf     # Project subject file
+```
 
-Les variables ($VAR) doivent être interprétées comme dans bash.
-Exemple attendu : echo $HOME affiche le chemin du répertoire utilisateur.
-Valeur de retour des commandes ($?) :
+---
 
-Doit refléter le statut de sortie de la dernière commande exécutée.
-Exemple attendu : echo $? après une commande affiche son statut de sortie.
-Gestion des signaux :
+## 🚀 Getting Started
 
-ctrl-C, ctrl-D, ctrl-\ doivent avoir le même comportement que dans bash.
-Exemple attendu : ctrl-C interrompt la commande en cours.
-Commandes externes et fonctions autorisées
-Commandes externes : malloc, free, write, open, read, close, fork, wait, waitpid, wait3, wait4, signal, kill, exit, getcwd, chdir, stat, lstat, fstat, execve, dup, dup2, pipe, opendir, readdir, closedir, strerror, errno.
+### 🔧 Dependencies
+Ensure that you have the `readline` library installed before compiling the project.
+
+For **Debian/Ubuntu**:
+```sh
+sudo apt-get install libreadline-dev
+```
+
+For **MacOS**:
+```sh
+brew install readline
+```
+
+---
+
+## 🏗️ Installation
+
+Clone the repository and compile the project using Make:
+
+```sh
+git clone https://github.com/42Floriano/minishell.git
+cd minishell
+make
+```
+
+This will generate the `minishell` executable.
+
+---
+
+## 🎮 How to Use
+
+Run `minishell`:
+```sh
+./minishell
+```
+
+### 🕹️ Features
+✅ Display a prompt when waiting for a new command
+✅ Execute shell commands via `execve`
+✅ Handle environment variables (`$HOME`, `$USER`, etc.)
+✅ Implement built-in commands
+✅ Handle pipes (`|`) and redirections (`>`, `<`, `>>`, `<<`)
+✅ Properly handle **signals** (`Ctrl+C`, `Ctrl+D`, `Ctrl+\`)
+✅ Exit status management (`$?`)
+❌ **Bonus features not implemented** (&&, ||, wildcard expansion)
+
+---
+
+## 🔧 Built-in Commands
+Minishell supports the following built-in commands:
+
+| Command  | Description |
+|----------|-------------|
+| `echo`   | Print text to the terminal, supports `-n` flag |
+| `cd`     | Change directory |
+| `pwd`    | Print the current directory |
+| `export` | Export an environment variable |
+| `unset`  | Remove an environment variable |
+| `env`    | Display the environment variables |
+| `exit`   | Exit the shell |
+
+---
+
+## 🛑 Known Issues
+- Some complex redirections may cause unexpected behavior.
+- Command history may not persist across sessions.
+
+---
+
+## 📌 Credits
+- **42Floriano** ([@42Floriano](https://github.com/42Floriano))
+- **Avdul** ([@aavduli](https://github.com/aavduli))
+
+---
+
+## 🏆 Acknowledgments
+This project was built as part of **42 School**, and serves as an introduction to shell implementation and UNIX internals.
+
+---
+
+🔗 [GitHub Repository](https://github.com/42Floriano/minishell)
+
